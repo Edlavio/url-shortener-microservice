@@ -30,6 +30,7 @@ app.get('/', (req, res) => {
 
 app.post('/api/shorturl', (req, res) => {
   const { url } = req.body;
+  const nanoid = customAlphabet('0123456789', 6);
 
   const hostname = urlModule.parse(url).hostname;
   
@@ -37,10 +38,15 @@ app.post('/api/shorturl', (req, res) => {
     return res.status(400).send({ error: 'invalid url' });
   }
 
+<<<<<<< HEAD
   const nanoid = customAlphabet('0123456789', 6);
 
   dns.lookup(hostname, async (err) => {
     if (err && err.code === 'ENOTFOUND') {
+=======
+  dns.lookup(urlModule.parse(url).hostname, async (err, address) => {
+    if (err && err.code === 'ENOTFOUND' || !address) {
+>>>>>>> 1d3cfd3 (:bug: Fix: Url verification logic)
       return res.status(400).send({ error: 'invalid url' });
     }
 
