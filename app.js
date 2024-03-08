@@ -1,5 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import bodyParser from 'body-parser';
+import cors from  'cors'
 import mongoose from 'mongoose';
 import dns from 'dns';
 import urlModule from 'url';
@@ -8,8 +10,10 @@ import { Url } from './model/urlSchema.js';
 
 const app = express();
 const port = 5000;
-app.use(express.json());
+
 dotenv.config();
+app.use(cors())
+app.use(bodyParser.urlencoded({extended: false}));
 
 function isValidUrl(urlString) {
   try {
@@ -19,6 +23,10 @@ function isValidUrl(urlString) {
     return false;
   }
 }
+
+app.get('/', (req, res) => {
+  res.sendFile(process.cwd() + '/views/index.html');
+});
 
 app.post('/api/shorturl', (req, res) => {
   const { url } = req.body;
