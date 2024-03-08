@@ -1,7 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
-import cors from  'cors'
+import cors from 'cors';
 import mongoose from 'mongoose';
 import dns from 'dns';
 import urlModule from 'url';
@@ -12,8 +12,9 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 dotenv.config();
-app.use(cors())
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 function isValidUrl(urlString) {
   try {
@@ -43,7 +44,7 @@ app.post('/api/shorturl', (req, res) => {
   }
 
   dns.lookup(urlModule.parse(url).hostname, async (err, address) => {
-    if (err && err.code === 'ENOTFOUND' || !address) {
+    if ((err && err.code === 'ENOTFOUND') || !address) {
       return res.status(400).send({ error: 'invalid url' });
     }
 
