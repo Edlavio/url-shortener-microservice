@@ -36,6 +36,12 @@ app.post('/api/shorturl', (req, res) => {
     return res.status(400).send({ error: 'invalid url' });
   }
 
+  const regex = /^(http|https):\/\//;
+
+  if (!regex.test(url)) {
+    return res.status(400).send({ error: 'invalid url' });
+  }
+
   dns.lookup(urlModule.parse(url).hostname, async (err, address) => {
     if (err && err.code === 'ENOTFOUND' || !address) {
       return res.status(400).send({ error: 'invalid url' });
