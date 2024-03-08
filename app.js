@@ -44,7 +44,7 @@ app.post('/api/shorturl', (req, res) => {
   }
 
   dns.lookup(urlModule.parse(url).hostname, async (err, address) => {
-    if ((err && err.code === 'ENOTFOUND') || !address) {
+    if (!address){
       return res.status(400).send({ error: 'invalid url' });
     }
 
