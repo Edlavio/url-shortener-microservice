@@ -31,11 +31,12 @@ app.get('/', (req, res) => {
 app.post('/api/shorturl', (req, res) => {
   const { url } = req.body;
 
+  const hostname = urlModule.parse(url).hostname;
+  
   if (!isValidUrl(url)) {
     return res.status(400).send({ error: 'invalid url' });
   }
 
-  const hostname = urlModule.parse(url).hostname;
   const nanoid = customAlphabet('0123456789', 6);
 
   dns.lookup(hostname, async (err) => {
