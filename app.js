@@ -34,18 +34,18 @@ app.post('/api/shorturl', (req, res) => {
   const nanoid = customAlphabet('0123456789', 6);
 
   if (!isValidUrl(url)) {
-    return res.status(400).send({ error: 'invalid url' });
+    return res.send({ error: 'invalid url' });
   }
 
-  const regex = /^(http|https):\/\//;
+  const regex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
 
   if (!regex.test(url)) {
-    return res.status(400).send({ error: 'invalid url' });
+    return res.send({ error: 'invalid url' });
   }
 
   dns.lookup(urlModule.parse(url).hostname, async (err, address) => {
     if (!address){
-      return res.status(400).send({ error: 'invalid url' });
+      return res.send({ error: 'invalid url' });
     }
 
     const saveUrl = new Url({
